@@ -64,7 +64,7 @@ yarn add -D @matterlabs/zksync-contracts @openzeppelin/contracts@4.9.5
 ```
 
 ::: warning
-This project does not use the latest version available of `@openzeppelin/contracts`. Mae sure you install the specific version mentioned above.
+This project does not use the latest version available of `@openzeppelin/contracts`. Make sure you install the specific version mentioned above.
 :::
 
 5. Include the `isSystem: true` setting in the `zksolc` section of the `hardhat.config.ts` configuration file to allow interaction with system contracts:
@@ -211,7 +211,7 @@ The code below sets and removes the limit.
         _updateLimit(_token, 0, 0, 0, false);
     }
 
-   // verify if the update to a Limit struct is valid
+    // verify if the update to a Limit struct is valid
     // Ensure that users can't freely modify(increase or remove) the daily limit to spend more.
     function isValidUpdate(address _token) internal view returns (bool) {
         // Reverts unless it is first spending after enabling
