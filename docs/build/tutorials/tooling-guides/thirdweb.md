@@ -42,7 +42,7 @@ const walletPrivateKey = "yourWalletPrivateKey";
 
 // Initializing the SDK
 const sdk = ThirdwebSDK.fromPrivateKey(walletPrivateKey, zkSyncRpcUrl, {
-    secretKey: "yourThirdwebSecretKey"
+  secretKey: "yourThirdwebSecretKey",
 });
 
 console.log("🚀 Thirdweb SDK initialized with wallet private key on zkSync Era Sepolia Testnet");
@@ -77,3 +77,4 @@ const tx = await contract.nft.mint({
 });
 
 console.log("NFT minted on zkSync Era Sepolia Testnet: ", tx);
+```
