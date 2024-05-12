@@ -132,6 +132,10 @@ export const enSidebar = sidebar({
               text: "SubQuery",
               link: "/build/tutorials/tooling-guides/subquery.md",
             },
+            {
+              text: "DipDup",
+              link: "/build/tutorials/tooling-guides/dipdup.md",
+            },
           ],
         },
         {
