@@ -9,72 +9,61 @@ head:
 
 [Thirdweb](https://thirdweb.com) offers a suite of SDKs and tools designed for developers to easily build, deploy, and manage web3 applications. It provides straightforward access to smart contract functionalities across various blockchains.
 
-This guide covers the basics of getting started with zkSync by using the Thirdweb SDK for JavaScript and TypeScript.
+This guide covers the basics of getting started with zkSync by using the Thirdweb SDK for React.
 
 ## Installation
 
-To begin using the Thirdweb SDK in your project, first, you need to install the SDK package. Open your terminal and run the following npm command:
+To begin using the Thirdweb SDK in your React project, first, you need to install the SDK package. Open your terminal and run the following npm command:
 
 ```bash
-npm install @thirdweb-dev/sdk
+npm install @thirdweb-dev/react
 ```
 
-This command installs the Thirdweb SDK and adds it to your project's dependencies.
+This command installs the Thirdweb React SDK and adds it to your project's dependencies.
 
-## Initial Setup
+## Initialization
 
-### Initialization
+You must initialize the SDK to interact with Thirdweb's functionalities. You will need a provider that wraps your main component and also to specify the active chain (in our case zkSync Sepolia Testnet) as well as Thirdweb Client ID.
 
-You must initialize the SDK to interact with Thirdweb's functionalities. You will need a provider that connects to the [zkSync JSON-RPC API](https://docs.zksync.io/build/api.html) endpoint url and optionally, a signer to execute transactions. Below example shows using your wallet private key as signer.
-
-Before initializing the SDK you need to create an [Thirdweb API Secret Key](https://thirdweb.com/create-api-key).
+In order to set this you need to first [Create Thirdweb Client ID](https://thirdweb.com/create-api-key).
 
 #### Example
 
 ```javascript
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import { ZksyncSepoliaTestnet } from "@thirdweb-dev/chains";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 
-// zkSync Era Sepolia Testnet network RPC URL
-const zkSyncRpcUrl = "https://sepolia.era.zksync.dev";
-
-// Your wallet private key
-const walletPrivateKey = "yourWalletPrivateKey";
-
-// Initializing the SDK
-const sdk = ThirdwebSDK.fromPrivateKey(walletPrivateKey, zkSyncRpcUrl, {
-  secretKey: "yourThirdwebSecretKey",
-});
-
-console.log("🚀 Thirdweb SDK initialized with wallet private key on zkSync Era Sepolia Testnet");
+function AppWithProvider() {
+  return (
+    <ThirdwebProvider
+      activeChain={ZksyncSepoliaTestnet}
+      clientId={yourThirdwebClientId}
+    >
+      <App />
+    </ThirdwebProvider>
+  );
+}
 ```
 
-### Interacting with Smart Contracts
+## Interacting with a Deployed NFT Collection
+Lets say you deploy an [NFT Drop Contract](https://thirdweb.com/thirdweb.eth/DropERC721) from the built-in Thirdweb contracts that you can utilize out of the box.
 
-Thirdweb SDK simplifies the interaction with smart contracts by providing pre-built contract modules. These modules cover a wide range of use cases like NFTs, marketplaces, and tokens.
-
-#### Deploying a Smart Contract
-
-To deploy a smart contract using Thirdweb, you can use the SDK's deployer functionality. Here's how to deploy a simple ERC-721 NFT contract:
+Once you have your contract address, you can interact with it directly through the React SDK! For instance, to claim a pre-minted NFT in the collection that you just deployed, first we need to import the necessary hooks and connect the user wallet:
 
 ```javascript
-const contract = await sdk.deployer.deployNFTCollection({
-  name: "My zkSync Era Testnet NFT Collection",
-  primary_sale_recipient: "walletAddressOfRecipient",
-});
+import { useAddress, useContract, useClaimNFT } from "@thirdweb-dev/react";
 
-console.log(`NFT Collection deployed on zkSync Era Sepolia Testnet at: ${contract.address}`);
+const connectedAddress = useAddress();
 ```
 
-#### Interacting with a Deployed Contract
-
-Once you have a contract deployed, you can interact with it directly through the SDK. For instance, to mint an NFT in the collection you deployed:
+Then all we need to do is load the contract and claim one NFT:
 
 ```javascript
-const tx = await contract.nft.mint({
-  name: "My First zkSync Testnet NFT",
-  description: "This is my first zkSync Testnet NFT!",
-  image: "<URL_TO_IMAGE>",
-});
+const { contract } = useContract(yourDeployedContractAddress);
+const { mutate: claimNft } = useClaimNFT(contract);
 
-console.log("NFT minted on zkSync Era Sepolia Testnet: ", tx);
+claimNft({
+  to: connectedAddress, 
+  quantity: 1,
+})
 ```
