@@ -35,10 +35,7 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 function AppWithProvider() {
   return (
-    <ThirdwebProvider
-      activeChain={ZksyncSepoliaTestnet}
-      clientId={yourThirdwebClientId}
-    >
+    <ThirdwebProvider activeChain={ZksyncSepoliaTestnet} clientId={yourThirdwebClientId}>
       <App />
     </ThirdwebProvider>
   );
@@ -46,6 +43,7 @@ function AppWithProvider() {
 ```
 
 ## Interacting with a Deployed NFT Collection
+
 Lets say you deploy an [NFT Drop Contract](https://thirdweb.com/thirdweb.eth/DropERC721) from the built-in Thirdweb contracts that you can utilize out of the box.
 
 Once you have your contract address, you can interact with it directly through the React SDK! For instance, to claim a pre-minted NFT in the collection that you just deployed, first we need to import the necessary hooks and connect the user wallet:
@@ -63,7 +61,7 @@ const { contract } = useContract(yourDeployedContractAddress);
 const { mutate: claimNft } = useClaimNFT(contract);
 
 claimNft({
-  to: connectedAddress, 
+  to: connectedAddress,
   quantity: 1,
-})
+});
 ```
